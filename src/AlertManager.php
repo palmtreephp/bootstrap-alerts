@@ -89,6 +89,30 @@ class AlertManager implements \IteratorAggregate
     }
 
     /**
+     * @param string $type
+     */
+    public function clearAlerts($type = null)
+    {
+        if ($type) {
+            $this->alerts = array_filter($this->alerts, function (Alert $alert) use ($type) {
+                return $alert->getType() === $type;
+            });
+        } else {
+            $this->alerts = [];
+        }
+    }
+
+    /**
+     * @param Alert $alertToClear
+     */
+    public function clearAlert(Alert $alertToClear)
+    {
+        $this->alerts = array_filter($this->alerts, function (Alert $alert) use ($alertToClear) {
+            return $alert !== $alertToClear;
+        });
+    }
+
+    /**
      * @param array $iconMap
      *
      * @return AlertManager
