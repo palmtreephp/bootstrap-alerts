@@ -14,97 +14,58 @@ class AlertManager implements \IteratorAggregate
         'warning' => 'exclamation-triangle',
     ];
 
-    /**
-     * @param string $html
-     * @param string $type
-     * @param bool   $dismissible
-     *
-     * @return AlertManager
-     */
-    public function addAlert($html, $type = 'success', $dismissible = false)
+    public function addAlert(string $html, string $type = 'success', bool $dismissible = false): self
     {
         $this->alerts[] = new Alert($html, $type, $this->getMappedIcon($type), $dismissible);
 
         return $this;
     }
 
-    /**
-     * @param string $html
-     * @param bool   $dismissible
-     *
-     * @return AlertManager
-     */
-    public function addSuccess($html, $dismissible = true)
+    public function addSuccess(string $html, bool $dismissible = true): self
     {
         return $this->addAlert($html, 'success', $dismissible);
     }
 
-    /**
-     * @param string $html
-     * @param bool   $dismissible
-     *
-     * @return AlertManager
-     */
-    public function addError($html, $dismissible = false)
+    public function addError(string $html, bool $dismissible = false): self
     {
         return $this->addAlert($html, 'danger', $dismissible);
     }
 
-    /**
-     * @param string $html
-     * @param bool   $dismissible
-     *
-     * @return AlertManager
-     */
-    public function addInfo($html, $dismissible = true)
+    public function addInfo(string $html, bool $dismissible = true): self
     {
         return $this->addAlert($html, 'info', $dismissible);
     }
 
-    /**
-     * @param string $html
-     * @param bool   $dismissible
-     *
-     * @return AlertManager
-     */
-    public function addWarning($html, $dismissible = true)
+    public function addWarning(string $html, bool $dismissible = true): self
     {
         return $this->addAlert($html, 'warning', $dismissible);
     }
 
     /**
-     * @param string $type Filter by alert type
-     *
      * @return Alert[]
      */
-    public function getAlerts($type = null)
+    public function getAlerts(?string $type = null): array
     {
-        if (!is_null($type)) {
-            return array_filter($this->alerts, function (Alert $alert) use ($type) {
+        if (null !== $type) {
+            return array_values(array_filter($this->alerts, function (Alert $alert) use ($type) {
                 return $alert->getType() === $type;
-            });
+            }));
         }
 
         return $this->alerts;
     }
 
-    /**
-     * @param string $type
-     */
-    public function clearAlerts($type = null)
+    public function clearAlerts(?string $type = null)
     {
         if ($type) {
-            $this->alerts = array_filter($this->alerts, function (Alert $alert) use ($type) {
+            $this->alerts = array_values(array_filter($this->alerts, function (Alert $alert) use ($type) {
                 return $alert->getType() === $type;
-            });
+            }));
         } else {
             $this->alerts = [];
         }
     }
 
-    /**
-     * @param Alert $alertToClear
-     */
     public function clearAlert(Alert $alertToClear)
     {
         $this->alerts = array_filter($this->alerts, function (Alert $alert) use ($alertToClear) {
@@ -112,42 +73,24 @@ class AlertManager implements \IteratorAggregate
         });
     }
 
-    /**
-     * @param array $iconMap
-     *
-     * @return AlertManager
-     */
-    public function setIconMap(array $iconMap)
+    public function setIconMap(array $iconMap): self
     {
         $this->iconMap = $iconMap;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getIconMap()
+    public function getIconMap(): array
     {
         return $this->iconMap;
     }
 
-    /**
-     * @param string $type
-     * @param string $icon
-     */
-    public function addIconMapEntry($type, $icon)
+    public function addIconMapEntry(string $type, string $icon)
     {
         $this->iconMap[$type] = $icon;
     }
 
-    /**
-     * @param string $type
-     * @param string $default
-     *
-     * @return mixed|null
-     */
-    public function getMappedIcon($type, $default = '')
+    public function getMappedIcon(string $type, string $default = ''): ?string
     {
         return isset($this->iconMap[$type]) ? $this->iconMap[$type] : $default;
     }

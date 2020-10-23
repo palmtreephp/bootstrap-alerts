@@ -15,16 +15,7 @@ class Alert
     /** @var string */
     protected $templateFile;
 
-    /**
-     * Alert constructor.
-     *
-     * @param string $data
-     * @param string $type
-     * @param null   $icon
-     * @param bool   $dismissible
-     * @param null   $templateFile
-     */
-    public function __construct($data, $type = 'success', $icon = null, $dismissible = false, $templateFile = null)
+    public function __construct(string $data, string $type = 'success', ?string $icon = null, bool $dismissible = false, ?string $templateFile = null)
     {
         $this
             ->setData($data)
@@ -32,101 +23,66 @@ class Alert
             ->setIcon($icon)
             ->setDismissible($dismissible);
 
-        if (is_null($templateFile)) {
+        if (null === $templateFile) {
             $templateFile = realpath(__DIR__ . '/../views/alert.html.php');
         }
 
         $this->setTemplateFile($templateFile);
     }
 
-    /**
-     * @return string
-     */
-    public function getData()
+    public function getData(): string
     {
         return $this->data;
     }
 
-    /**
-     * @param string $data
-     *
-     * @return Alert
-     */
-    public function setData($data)
+    public function setData(string $data): self
     {
         $this->data = $data;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return Alert
-     */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIcon()
+    public function getIcon(): string
     {
         return $this->icon;
     }
 
-    /**
-     * @param string $icon
-     *
-     * @return Alert
-     */
-    public function setIcon($icon)
+    public function setIcon(string $icon): self
     {
         $this->icon = $icon;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isDismissible()
+    public function isDismissible(): bool
     {
         return $this->dismissible;
     }
 
-    /**
-     * @param bool $dismissible
-     *
-     * @return Alert
-     */
-    public function setDismissible($dismissible)
+    public function setDismissible(bool $dismissible): self
     {
         $this->dismissible = $dismissible;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getClassAttr()
+    public function getClassAttr(): string
     {
         $classes = [
             'alert',
-            sprintf('alert-%s', $this->getType()),
+            "alert-$this->type",
         ];
 
         if ($this->isDismissible()) {
@@ -136,30 +92,19 @@ class Alert
         return implode(' ', $classes);
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateFile()
+    public function getTemplateFile(): string
     {
         return $this->templateFile;
     }
 
-    /**
-     * @param string $templateFile
-     *
-     * @return Alert
-     */
-    public function setTemplateFile($templateFile)
+    public function setTemplateFile(string $templateFile): self
     {
         $this->templateFile = $templateFile;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         ob_start();
 
