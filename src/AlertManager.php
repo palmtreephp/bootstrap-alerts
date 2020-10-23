@@ -2,7 +2,7 @@
 
 namespace Palmtree\BootstrapAlerts;
 
-class AlertManager implements \IteratorAggregate
+class AlertManager implements \IteratorAggregate, \Serializable
 {
     /** @var Alert[] */
     protected $alerts = [];
@@ -117,5 +117,15 @@ class AlertManager implements \IteratorAggregate
         }
 
         return $result;
+    }
+
+    public function serialize()
+    {
+        return serialize($this->alerts);
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->alerts = unserialize($serialized);
     }
 }
