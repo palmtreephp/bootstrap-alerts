@@ -10,7 +10,7 @@ Bootstrap v4 alert manager for PHP projects.
 Add and display [bootstrap alerts](https://getbootstrap.com/docs/4.1/components/alerts/) with relevant [Font Awesome](https://fontawesome.com/icons) icons
 
 ## Requirements
-* PHP >= 5.6
+* PHP >= 7.1
 
 ## Installation
 
