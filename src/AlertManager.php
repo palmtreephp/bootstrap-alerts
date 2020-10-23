@@ -55,6 +55,11 @@ class AlertManager implements \IteratorAggregate
         return $this->alerts;
     }
 
+    public function hasAlerts(?string $type = null): bool
+    {
+        return \count($this->getAlerts($type)) > 0;
+    }
+
     public function clearAlerts(?string $type = null)
     {
         if ($type) {
