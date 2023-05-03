@@ -100,10 +100,7 @@ class AlertManager implements \IteratorAggregate, \Serializable
         return isset($this->iconMap[$type]) ? $this->iconMap[$type] : $default;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->getAlerts());
     }
