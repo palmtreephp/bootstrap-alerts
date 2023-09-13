@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Palmtree\BootstrapAlerts;
 
-class AlertManager implements \IteratorAggregate, \Serializable
+class AlertManager implements \IteratorAggregate
 {
-    /** @var Alert[] */
-    protected $alerts = [];
-    /** @var array Map of error_type => font awesome icon */
-    protected $iconMap = [
+    /** @var list<Alert> */
+    private array $alerts = [];
+
+    /** @var array<string, string> Map of error_type => font awesome icon */
+    private array $iconMap = [
         'success' => 'check-circle',
-        'danger'  => 'exclamation-circle',
-        'info'    => 'question-circle',
+        'danger' => 'exclamation-circle',
+        'info' => 'question-circle',
         'warning' => 'exclamation-triangle',
     ];
 
@@ -42,40 +45,34 @@ class AlertManager implements \IteratorAggregate, \Serializable
     }
 
     /**
-     * @return Alert[]
+     * @return list<Alert>
      */
-    public function getAlerts(?string $type = null): array
+    public function getAlerts(string $type = null): array
     {
         if (null !== $type) {
-            return array_values(array_filter($this->alerts, function (Alert $alert) use ($type) {
-                return $alert->getType() === $type;
-            }));
+            return array_values(array_filter($this->alerts, fn (Alert $alert) => $alert->getType() === $type));
         }
 
         return $this->alerts;
     }
 
-    public function hasAlerts(?string $type = null): bool
+    public function hasAlerts(string $type = null): bool
     {
         return \count($this->getAlerts($type)) > 0;
     }
 
-    public function clearAlerts(?string $type = null)
+    public function clearAlerts(string $type = null): void
     {
         if ($type) {
-            $this->alerts = array_values(array_filter($this->alerts, function (Alert $alert) use ($type) {
-                return $alert->getType() === $type;
-            }));
+            $this->alerts = array_values(array_filter($this->alerts, fn (Alert $alert) => $alert->getType() === $type));
         } else {
             $this->alerts = [];
         }
     }
 
-    public function clearAlert(Alert $alertToClear)
+    public function clearAlert(Alert $alertToClear): void
     {
-        $this->alerts = array_filter($this->alerts, function (Alert $alert) use ($alertToClear) {
-            return $alert !== $alertToClear;
-        });
+        $this->alerts = array_filter($this->alerts, fn (Alert $alert) => $alert !== $alertToClear);
     }
 
     public function setIconMap(array $iconMap): self
@@ -90,14 +87,14 @@ class AlertManager implements \IteratorAggregate, \Serializable
         return $this->iconMap;
     }
 
-    public function addIconMapEntry(string $type, string $icon)
+    public function addIconMapEntry(string $type, string $icon): void
     {
         $this->iconMap[$type] = $icon;
     }
 
     public function getMappedIcon(string $type, string $default = ''): ?string
     {
-        return isset($this->iconMap[$type]) ? $this->iconMap[$type] : $default;
+        return $this->iconMap[$type] ?? $default;
     }
 
     public function getIterator(): \ArrayIterator
@@ -107,22 +104,22 @@ class AlertManager implements \IteratorAggregate, \Serializable
 
     public function __toString()
     {
-        $result = '';
+        $result = [];
 
         foreach ($this->getAlerts() as $alert) {
-            $result .= $alert->__toString();
+            $result[] = $alert->__toString();
         }
 
-        return $result;
+        return implode("\n", $result);
     }
 
-    public function serialize()
+    public function __serialize(): array
     {
-        return serialize($this->alerts);
+        return $this->alerts;
     }
 
-    public function unserialize($serialized)
+    public function __unserialize(array $data): void
     {
-        $this->alerts = unserialize($serialized);
+        $this->alerts = $data;
     }
 }

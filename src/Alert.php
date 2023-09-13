@@ -1,21 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Palmtree\BootstrapAlerts;
 
 class Alert
 {
-    /** @var string */
-    protected $data;
-    /** @var string */
-    protected $type;
-    /** @var string */
-    protected $icon;
-    /** @var bool */
-    protected $dismissible;
-    /** @var string */
-    protected $templateFile;
+    private string $data;
+    private string $type;
+    private string $icon;
+    private bool $dismissible;
+    private string $templateFile;
 
-    public function __construct(string $data, string $type = 'success', ?string $icon = null, bool $dismissible = false, ?string $templateFile = null)
+    public function __construct(string $data, string $type = 'success', string $icon = null, bool $dismissible = false, string $templateFile = null)
     {
         $this
             ->setData($data)
