@@ -5,8 +5,7 @@
     <?php endif; ?>
     <?= $alert->getData(); ?>
     <?php if ($alert->isDismissible()): ?>
-        <button type="button" class="close btn-close" data-dismiss="alert" data-bs-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-dismiss="alert" data-bs-dismiss="alert" aria-label="Close">
         </button>
     <?php endif; ?>
 </div>
